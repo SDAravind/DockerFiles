@@ -48,8 +48,8 @@ CMD ["jupyterhub"]
 
 # MINICONDA
 # docker build -t miniconda .
-# docker run -dit -p 8888:8888 -v $pwd/miniconda:/home/ubuntu --name miniconda miniconda
+# docker run -dit -p 8888:8888 -v ${pwd}/miniconda:/home/ubuntu --name miniconda miniconda
 
 # JUPYTERHUB
 # docker build -t jupyterhub .
-# docker run -dit -p 8000:8000 -v $pwd/miniconda:/home/ubuntu --name jupyterhub jupyterhub
+# docker run -dit -p 8000:8000 -v ${pwd}/miniconda:/home/ubuntu --name jupyterhub jupyterhub
