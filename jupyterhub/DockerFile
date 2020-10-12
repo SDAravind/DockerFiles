@@ -40,7 +40,7 @@ RUN chmod +x /usr/bin/tini
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 # EXPOSE 8888
-# CMD ["jupyter", "lab", "--notebook-dir=/home/datalabs/notebooks", "--ip='*'", "--port=8888", "--no-browser","--NotebookApp.token=''","--NotebookApp.password=''", "--allow-root"]
+# CMD ["jupyter", "lab", "--notebook-dir=/home/ubuntu/notebooks", "--ip='*'", "--port=8888", "--no-browser","--NotebookApp.token=''","--NotebookApp.password=''", "--allow-root"]
 EXPOSE 8000
 CMD ["jupyterhub"]
 
@@ -52,6 +52,4 @@ CMD ["jupyterhub"]
 
 # JUPYTERHUB
 # docker build -t jupyterhub .
-# docker run -dit -p 8001:8000 -v $pwd/miniconda:/home/ubuntu --name jupyterhub jupyterhub
-
-# docker run -it -p 8888:8888 miniconda3 /bin/bash -c "jupyter lab --notebook-dir=/home/ubuntu/notebooks --ip='*' --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password='' --allow-root"
+# docker run -dit -p 8000:8000 -v $pwd/miniconda:/home/ubuntu --name jupyterhub jupyterhub
