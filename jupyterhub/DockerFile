@@ -1,0 +1,57 @@
+# ------------------------------------------------2020OCT12------------------------------------------------
+
+# FROM debian:latest
+FROM ubuntu:latest
+ARG USER=ubuntu
+ARG UID=1000
+ARG GID=1000
+ARG PW=ubuntu
+
+# https://stackoverflow.com/a/49848507
+RUN useradd -rm -d /home/${USER} -s /bin/bash -g root -G sudo -u ${UID} ${USER} -p ${PW}
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PATH /home/conda/bin:$PATH
+
+RUN apt-get update --fix-missing && \
+    apt-get install -y wget bzip2 ca-certificates curl git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /home/conda && \
+    rm ~/miniconda.sh && \
+    conda init && \
+    conda install jupyterlab nb_conda jupyterhub -y && \
+    conda update -n base -c defaults conda -y && \
+    jupyterhub --generate-config && \
+    conda create -n py36 python=3.6 ipykernel -y && \
+    conda create -n py37 python=3.7 ipykernel -y && \
+    conda create -n py38 python=3.8 ipykernel -y && \
+    conda create -n py-latest python=3 ipykernel -y && \
+    mkdir /home/${USER}/notebooks && \
+    conda clean -acqy && \
+    ln -s /home/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /home/conda/etc/profile.d/conda.sh" >> ~/.bashrc
+
+
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+RUN chmod +x /usr/bin/tini
+
+ENTRYPOINT [ "/usr/bin/tini", "--" ]
+# EXPOSE 8888
+# CMD ["jupyter", "lab", "--notebook-dir=/home/datalabs/notebooks", "--ip='*'", "--port=8888", "--no-browser","--NotebookApp.token=''","--NotebookApp.password=''", "--allow-root"]
+EXPOSE 8000
+CMD ["jupyterhub"]
+
+# CMD [ "/bin/bash" ]
+
+# MINICONDA
+# docker build -t miniconda .
+# docker run -dit -p 8888:8888 -v $pwd/miniconda:/home/ubuntu --name miniconda miniconda
+
+# JUPYTERHUB
+# docker build -t jupyterhub .
+# docker run -dit -p 8001:8000 -v $pwd/miniconda:/home/ubuntu --name jupyterhub jupyterhub
+
+# docker run -it -p 8888:8888 miniconda3 /bin/bash -c "jupyter lab --notebook-dir=/home/ubuntu/notebooks --ip='*' --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password='' --allow-root"

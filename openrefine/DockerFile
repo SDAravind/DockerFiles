@@ -1,0 +1,26 @@
+# ------------------------------------------------2020OCT12------------------------------------------------
+# credit to vimagick/openrefine
+
+FROM openjdk:8-jre-slim
+
+ENV OPENREFINE_VERSION 3.4.1
+ENV OPENREFINE_FILE openrefine-linux-${OPENREFINE_VERSION}.tar.gz
+ENV OPENREFINE_URL https://github.com/OpenRefine/OpenRefine/releases/download/${OPENREFINE_VERSION}/${OPENREFINE_FILE}
+
+WORKDIR /app
+ENV PATH /app:$PATH
+
+RUN apt-get update --fix-missing && \
+    apt-get install -y wget && \
+    wget --quiet ${OPENREFINE_URL} -O ~/openrefine.tar.gz && \
+    tar -xzvf ~/openrefine.tar.gz --strip 1 -C /app && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm ~/openrefine.tar.gz
+
+
+VOLUME /data
+WORKDIR /data
+
+EXPOSE 3333
+
+CMD ["refine", "-i", "0.0.0.0", "-d", "/data"]
