@@ -1,0 +1,15 @@
+FROM python:slim
+WORKDIR /
+# COPY requirements.txt .
+RUN pip install --no-cache-dir django && \
+    # rm -rf requirements.txt && \
+    django-admin startproject app
+WORKDIR /app
+EXPOSE 5001 
+ENTRYPOINT [ "python" ]
+CMD [ "manage.py", "runserver", "0:5001" ]
+
+
+# docker build -t django_app .
+# docker run -dit --name django_app -p 5001:5001 django_app
+# docker run -dit -v ${pwd}/app:/app/ --name django_app -p 5001:5001 django_app
