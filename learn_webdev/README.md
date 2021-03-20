@@ -1,6 +1,6 @@
 # USAGE
 
-1) Install Docker on your machine from **[here](https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe)**
+1) Install Docker on your machine from [here](https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe)
 2) Double click on `START` provided in the `repo` that builds and runs `webdev` container with below items
     -   Uses `node:lts-slim` from [here](https://hub.docker.com/_/node)  
     -   Sets `/usr/share/webdev` as `Work Directory`  
